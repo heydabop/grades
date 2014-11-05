@@ -1,7 +1,7 @@
 package main
 
 import(
-	"github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 	"database/sql"
 	"bufio"
 	"fmt"
@@ -35,7 +35,6 @@ func main(){
 			fmt.Println()*/
 			dept := match[1]
 			classNo := match[2]
-			deptClassNo := match[1] + "-" + match[2]
 			A := match[3]
 			B := match[4]
 			C := match[5]
@@ -46,18 +45,11 @@ func main(){
 			U := match[10]
 			Q := match[11]
 			X := match[12]
-			prof := match[12]
-			sqlStmt := `INSERT INTO classes VALUES('`+deptClassNo+`', '`+dept+`', `+classNo+`,`+A+`, `+B+`, `+C+`, `+D+`, `+F+`, `+I+`, `+S+`, `+U+`, `+Q+`, `+X+`, '`+prof+`');`
+			prof := match[13]
+			sqlStmt := `INSERT INTO classes VALUES('`+dept+`', `+classNo+`,`+A+`, `+B+`, `+C+`, `+D+`, `+F+`, `+I+`, `+S+`, `+U+`, `+Q+`, `+X+`, '`+prof+`');`
 			fmt.Println(sqlStmt)
 			_, err = db.Exec(sqlStmt)
 			if err != nil {
-				if err.(sqlite3.Error).Code == 19 { //constraint failed, likely PRIMARY KEY
-					fmt.Println("CONSTRAINT FAILED")
-					if err.(sqlite3.Error).ExtendedCode == 1555 { //UPDATE instead of INSERT if PRIMARY KEY CONSTRAINT failure
-						fmt.Println("PRIMARY KEY FAILED")
-						//UPDATE HERE
-					}
-				}
 				log.Fatal(err)
 			}
 		}
