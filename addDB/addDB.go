@@ -31,6 +31,7 @@ func main(){
 	line := ""
 	year := ""
 	semester := ""
+	count := 0
 	for line, err = txtReader.ReadString('\n'); err == nil; line, err = txtReader.ReadString('\n') {
 		if len(year) == 0 {
 			match := yearSemesterRegex.FindStringSubmatch(line)
@@ -64,9 +65,11 @@ func main(){
 			if err != nil {
 				log.Fatal(err)
 			}
+			count++
 		}
 	}
 	if err != nil {
 		log.Println(err)
 	}
+	fmt.Printf("%d rows inserted\n", count)
 }
