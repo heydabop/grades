@@ -12,6 +12,7 @@ import(
 
 func main(){
 	classLineRegex := regexp.MustCompile(`^([A-Z]{4})-(\d{3})-\d{3}\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+[0-9.]+\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+([A-Za-z ]+)`)
+	yearSemesterRegex := regexp.MustCompile(`GRADE DISTRIBUTION REPORT FOR (\w+) (\d+)`)
 	if(len(os.Args) != 2){
 		fmt.Printf("Usage: %s <txt file>\n", os.Args[0])
 	}
@@ -27,7 +28,16 @@ func main(){
 	defer db.Close()
 	txtReader := bufio.NewReader(txtFile)
 	line := ""
+	year := ""
+	semester := ""
 	for line, err = txtReader.ReadString('\n'); err == nil; line, err = txtReader.ReadString('\n') {
+		if len(year) == 0 {
+			match := yearSemesterRegex.FindStringSubmatch(line)
+			if match != nil {
+				semester = match[1]
+				year = match[2]
+			}
+		}
 		if match := classLineRegex.FindStringSubmatch(line); match != nil {
 			/*for i := 1; i < len(match); i++ {
 				fmt.Printf("%s, ", match[i])
@@ -46,7 +56,7 @@ func main(){
 			Q := match[11]
 			X := match[12]
 			prof := match[13]
-			sqlStmt := `INSERT INTO classes VALUES('`+dept+`', `+classNo+`,`+A+`, `+B+`, `+C+`, `+D+`, `+F+`, `+I+`, `+S+`, `+U+`, `+Q+`, `+X+`, '`+prof+`');`
+			sqlStmt := `INSERT INTO classes VALUES('`+dept+`', `+classNo+`,`+A+`, `+B+`, `+C+`, `+D+`, `+F+`, `+I+`, `+S+`, `+U+`, `+Q+`, `+X+`, '`+prof+`', `+year+`, '`+semester+`');`
 			fmt.Println(sqlStmt)
 			_, err = db.Exec(sqlStmt)
 			if err != nil {
