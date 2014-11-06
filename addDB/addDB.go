@@ -11,17 +11,18 @@ import(
 )
 
 func main(){
-	classLineRegex := regexp.MustCompile(`^([A-Z]{4})-(\d{3})-\d{3}\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+[0-9.]+\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+([A-Za-z ]+)`)
+	classLineRegex := regexp.MustCompile(`^([A-Z]{4})-(\d{3})-(\d{3})\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+[0-9.]+\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+([A-Za-z ]+)`)
 	yearSemesterRegex := regexp.MustCompile(`GRADE DISTRIBUTION REPORT FOR (\w+) (\d+)`)
-	if(len(os.Args) != 2){
-		fmt.Printf("Usage: %s <txt file>\n", os.Args[0])
+	if(len(os.Args) != 3){
+		fmt.Printf("Usage: %s <txt file> <sqlite3 db file>\n", os.Args[0])
+		os.Exit(1)
 	}
 	txtFile, err := os.Open(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer txtFile.Close()
-	db, err := sql.Open("sqlite3", "../classes.db")
+	db, err := sql.Open("sqlite3", os.Args[2])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,19 +45,20 @@ func main(){
 			}
 			fmt.Println()*/
 			dept := match[1]
-			classNo := match[2]
-			A := match[3]
-			B := match[4]
-			C := match[5]
-			D := match[6]
-			F := match[7]
-			I := match[8]
-			S := match[9]
-			U := match[10]
-			Q := match[11]
-			X := match[12]
-			prof := match[13]
-			sqlStmt := `INSERT INTO classes VALUES('`+dept+`', `+classNo+`,`+A+`, `+B+`, `+C+`, `+D+`, `+F+`, `+I+`, `+S+`, `+U+`, `+Q+`, `+X+`, '`+prof+`', `+year+`, '`+semester+`');`
+			number := match[2]
+			section := match[3]
+			A := match[4]
+			B := match[5]
+			C := match[6]
+			D := match[7]
+			F := match[8]
+			I := match[9]
+			S := match[10]
+			U := match[11]
+			Q := match[12]
+			X := match[13]
+			prof := match[14]
+			sqlStmt := `INSERT INTO classes VALUES('`+dept+`', `+number+`, `+section+`, `+A+`, `+B+`, `+C+`, `+D+`, `+F+`, `+I+`, `+S+`, `+U+`, `+Q+`, `+X+`, '`+prof+`', `+year+`, '`+semester+`');`
 			fmt.Println(sqlStmt)
 			_, err = db.Exec(sqlStmt)
 			if err != nil {
