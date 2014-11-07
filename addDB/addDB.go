@@ -1,19 +1,19 @@
 package main
 
-import(
-	_ "github.com/mattn/go-sqlite3"
-	"database/sql"
+import (
 	"bufio"
+	"database/sql"
 	"fmt"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
 	"regexp"
 )
 
-func main(){
+func main() {
 	classLineRegex := regexp.MustCompile(`^([A-Z]{4})-(\d{3})-(\d{3})\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+[0-9.]+\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+([A-Za-z ]+)`)
 	yearSemesterRegex := regexp.MustCompile(`GRADE DISTRIBUTION REPORT FOR (\w+) (\d+)`)
-	if(len(os.Args) != 3){
+	if len(os.Args) != 3 {
 		fmt.Printf("Usage: %s <txt file> <sqlite3 db file>\n", os.Args[0])
 		os.Exit(1)
 	}
@@ -59,7 +59,7 @@ func main(){
 			Q := match[12]
 			X := match[13]
 			prof := match[14]
-			sqlStmt := `INSERT INTO classes VALUES('`+dept+`', `+number+`, `+section+`, `+A+`, `+B+`, `+C+`, `+D+`, `+F+`, `+I+`, `+S+`, `+U+`, `+Q+`, `+X+`, '`+prof+`', `+year+`, '`+semester+`');`
+			sqlStmt := `INSERT INTO classes VALUES('` + dept + `', ` + number + `, ` + section + `, ` + A + `, ` + B + `, ` + C + `, ` + D + `, ` + F + `, ` + I + `, ` + S + `, ` + U + `, ` + Q + `, ` + X + `, '` + prof + `', ` + year + `, '` + semester + `');`
 			fmt.Println(sqlStmt)
 			_, err = db.Exec(sqlStmt)
 			if err != nil {
