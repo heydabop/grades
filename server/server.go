@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type gradeReq struct {
@@ -21,6 +22,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal([]byte(r.PostFormValue("reqJSON")), &req)
 	if err != nil {
 		log.Println(err)
+		http.Error(w, strconv.FormatInt(http.StatusBadRequest, 10)+" Error: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	log.Println(req)
