@@ -34,7 +34,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(req)
-	stmt := "SELECT * FROM classes WHERE 1 ";
+	stmt := "SELECT * FROM classes WHERE 1 "
 	if len(req.Dept) > 0 {
 		stmt += "AND dept='" + req.Dept + "' "
 	}
@@ -57,7 +57,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Query(stmt)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10) + " Error", http.StatusInternalServerError)
+		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10)+" Error", http.StatusInternalServerError)
 		return
 	}
 	defer rows.Close()
@@ -65,7 +65,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		cols, err := rows.Columns()
 		if err != nil {
 			log.Println(err)
-			http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10) + " Error", http.StatusInternalServerError)
+			http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10)+" Error", http.StatusInternalServerError)
 			return
 		}
 		readResults := make([]interface{}, len(cols))
@@ -75,14 +75,14 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if err := rows.Scan(readResults...); err != nil {
 			log.Println(err)
-			http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10) + " Error", http.StatusInternalServerError)
+			http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10)+" Error", http.StatusInternalServerError)
 			return
 		}
 		fmt.Fprintf(w, "%s\n", writeResults)
 	}
 	if err := rows.Err(); err != nil {
 		log.Println(err)
-		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10) + " Error", http.StatusInternalServerError)
+		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10)+" Error", http.StatusInternalServerError)
 		return
 	}
 }
