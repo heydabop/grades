@@ -1,11 +1,19 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
+)
+
+var (
+	db *sql.DB
 )
 
 type gradeReq struct {
@@ -26,13 +34,72 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(req)
-	fmt.Fprintf(w, "Dept: %s\nNumber: %s\nSection: %s\nProf: %s\nYear: %s\nSemester: %s\n",
-		req.Dept, req.Number, req.Section, req.Prof, req.Year, req.Semester)
+	stmt := "SELECT * FROM classes WHERE 1 ";
+	if len(req.Dept) > 0 {
+		stmt += "AND dept='" + req.Dept + "' "
+	}
+	if len(req.Number) > 0 {
+		stmt += "AND number=" + req.Number + " "
+	}
+	if len(req.Section) > 0 {
+		stmt += "AND section=" + req.Section + " "
+	}
+	if len(req.Prof) > 0 {
+		stmt += "AND prof='" + req.Prof + "' "
+	}
+	if len(req.Year) > 0 {
+		stmt += "AND year=" + req.Year + " "
+	}
+	if len(req.Semester) > 0 {
+		stmt += "AND semester='" + req.Semester + "' "
+	}
+	fmt.Println(stmt)
+	rows, err := db.Query(stmt)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10) + " Error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		cols, err := rows.Columns()
+		if err != nil {
+			log.Println(err)
+			http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10) + " Error", http.StatusInternalServerError)
+			return
+		}
+		readResults := make([]interface{}, len(cols))
+		writeResults := make([]string, len(cols))
+		for i := range readResults {
+			readResults[i] = &writeResults[i]
+		}
+		if err := rows.Scan(readResults...); err != nil {
+			log.Println(err)
+			http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10) + " Error", http.StatusInternalServerError)
+			return
+		}
+		fmt.Fprintf(w, "%s\n", writeResults)
+	}
+	if err := rows.Err(); err != nil {
+		log.Println(err)
+		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10) + " Error", http.StatusInternalServerError)
+		return
+	}
 }
 
 func main() {
+	if len(os.Args) != 2 {
+		fmt.Printf("Usage: %s <sqlite3 db file>\n", os.Args[0])
+		return
+	}
+	err := errors.New("")
+	db, err = sql.Open("sqlite3", os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
 	http.HandleFunc("/getData/", getDataHandler)
-	err := http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
