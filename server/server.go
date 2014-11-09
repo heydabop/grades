@@ -61,6 +61,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer rows.Close()
+	jsonString := "{\"classes\":["
 	for rows.Next() {
 		cols, err := rows.Columns()
 		if err != nil {
@@ -78,13 +79,19 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10)+" Error", http.StatusInternalServerError)
 			return
 		}
-		fmt.Fprintf(w, "%s\n", writeResults)
+		jsonString += "{"
+		for i := range writeResults {
+			jsonString += "\"" + cols[i] + "\":\"" + writeResults[i] + "\","
+		}
+		jsonString = jsonString[:len(jsonString)-1] + "},"
 	}
 	if err := rows.Err(); err != nil {
 		log.Println(err)
 		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10)+" Error", http.StatusInternalServerError)
 		return
 	}
+	jsonString = jsonString[:len(jsonString)-1] + "]}"
+	fmt.Fprintln(w, jsonString)
 }
 
 func main() {
