@@ -34,7 +34,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(req)
-	stmt := "SELECT * FROM classes WHERE 1 "
+	stmt := "SELECT * FROM classes WHERE gpa NOT NULL "
 	if len(req.Dept) > 0 {
 		stmt += "AND dept='" + req.Dept + "' "
 	}
