@@ -9,11 +9,14 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     deptSel.add(o1);
 
+    $(document).on('submit', '#classForm', function(e){
+        $.post($(this).attr('action'),
+               $(this).serialize(),
+               function(data){
+                   var divTest = document.getElementById("testBox");
+                   divTest.innerHTML = data;
+               });
+        e.preventDefault();
+    });
 
-    $.post("/grades/getData/",
-           'reqJSON={"dept":"MEEN","number":"221","year":"2012","semester":"SPRING"}',
-           function(data){
-               var divTest = document.getElementById("testBox");
-               divTest.innerHTML = data;
-           });
 });
