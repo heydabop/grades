@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"errors"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
@@ -26,32 +25,31 @@ type gradeReq struct {
 }
 
 func getDataHandler(w http.ResponseWriter, r *http.Request) {
-	req := gradeReq{}
-	err := json.Unmarshal([]byte(r.PostFormValue("reqJSON")), &req)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, strconv.FormatInt(http.StatusBadRequest, 10)+" Error: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-	log.Println(req)
+	dept := r.PostFormValue("dept")
+	number := r.PostFormValue("number")
+	section := r.PostFormValue("section")
+	prof := r.PostFormValue("prof")
+	year := r.PostFormValue("year")
+	semester := r.PostFormValue("semester")
+	log.Println(r.Form)
 	stmt := "SELECT * FROM classes WHERE 1 "
-	if len(req.Dept) > 0 {
-		stmt += "AND dept='" + req.Dept + "' "
+	if len(dept) > 0 {
+		stmt += "AND dept='" + dept + "' "
 	}
-	if len(req.Number) > 0 {
-		stmt += "AND number=" + req.Number + " "
+	if len(number) > 0 {
+		stmt += "AND number=" + number + " "
 	}
-	if len(req.Section) > 0 {
-		stmt += "AND section=" + req.Section + " "
+	if len(section) > 0 {
+		stmt += "AND section=" + section + " "
 	}
-	if len(req.Prof) > 0 {
-		stmt += "AND prof='" + req.Prof + "' "
+	if len(prof) > 0 {
+		stmt += "AND prof='" + prof + "' "
 	}
-	if len(req.Year) > 0 {
-		stmt += "AND year=" + req.Year + " "
+	if len(year) > 0 {
+		stmt += "AND year=" + year + " "
 	}
-	if len(req.Semester) > 0 {
-		stmt += "AND semester='" + req.Semester + "' "
+	if len(semester) > 0 {
+		stmt += "AND semester='" + semester + "' "
 	}
 	fmt.Println(stmt)
 	rows, err := db.Query(stmt)
