@@ -34,7 +34,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(req)
-	stmt := "SELECT * FROM classes WHERE gpa NOT NULL "
+	stmt := "SELECT * FROM classes WHERE 1 "
 	if len(req.Dept) > 0 {
 		stmt += "AND dept='" + req.Dept + "' "
 	}
@@ -70,7 +70,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		readResults := make([]interface{}, len(cols))
-		writeResults := make([]string, len(cols))
+		writeResults := make([]sql.NullString, len(cols))
 		for i := range readResults {
 			readResults[i] = &writeResults[i]
 		}
@@ -81,7 +81,9 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		jsonString += "{"
 		for i := range writeResults {
-			jsonString += "\"" + cols[i] + "\":\"" + writeResults[i] + "\","
+			if writeResults[i].Valid {
+				jsonString += "\"" + cols[i] + "\":\"" + writeResults[i].String + "\","
+			}
 		}
 		jsonString = jsonString[:len(jsonString)-1] + "},"
 	}
