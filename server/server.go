@@ -51,7 +51,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 	if len(semester) > 0 {
 		stmt += "AND semester='" + semester + "' "
 	}
-	stmt += "ORDER BY year ASC"
+	stmt += "ORDER BY year ASC, CASE WHEN semester = 'SPRING' THEN 1 WHEN semester = 'SUMMER' THEN 2 ELSE 3 END ASC"
 	fmt.Println(stmt)
 	rows, err := db.Query(stmt)
 	if err != nil {
