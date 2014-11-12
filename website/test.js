@@ -73,7 +73,9 @@ document.addEventListener("DOMContentLoaded", function(event){
                        },
                        hAxis: {
                            title: 'Semester'
-                       }
+                       },
+                       pointSize: 5,
+                       interpolateNulls: true
                    };
 
                    if(chartLoaded){
