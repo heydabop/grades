@@ -52,14 +52,20 @@ document.addEventListener("DOMContentLoaded", function(event){
                        var sem = classArray[i].semester;
                        var gpa = classArray[i].gpa;
                        var prof = classArray[i].prof;
-                       var rowId = i+1;
-                       if (typeof map.get(year + ' ' + sem) === 'undefined'){
+                       var rowId = graphArray.length;
+                       if (typeof rowsMap.get(year + ' ' + sem) === 'undefined'){
                            rowsMap.set(year + ' ' + sem, rowId)
-                           graphArray.push(new Array(cols.length));
+                           var newRow = [];
+                           var j = 0;
+                           newRow.push(year + ' ' + sem);
+                           for (j = 0; j < colsUnique.length-1; ++j){
+                               newRow.push(0);
+                           }
+                           graphArray.push(newRow);
                        } else {
                            rowId = rowsMap.get(year + ' ' + sem);
                        }
-                       graphArray[rowId][colsMap.get(prof)] = gpa;
+                       graphArray[rowId][colsMap.get(prof)] = parseFloat(gpa);
                    }
                    console.log(graphArray);
                });
