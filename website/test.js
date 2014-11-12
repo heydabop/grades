@@ -56,12 +56,9 @@ document.addEventListener("DOMContentLoaded", function(event){
                        var rowId = graphArray.length;
                        if (typeof rowsMap.get(year + ' ' + sem) === 'undefined'){
                            rowsMap.set(year + ' ' + sem, rowId)
-                           var newRow = [];
+                           var newRow = new Array(colsUnique.length);
                            var j = 0;
-                           newRow.push(year + ' ' + sem);
-                           for (j = 0; j < colsUnique.length-1; ++j){
-                               newRow.push(0);
-                           }
+                           newRow[0] = (year + ' ' + sem);
                            graphArray.push(newRow);
                        } else {
                            rowId = rowsMap.get(year + ' ' + sem);
@@ -70,9 +67,18 @@ document.addEventListener("DOMContentLoaded", function(event){
                    }
                    console.log(graphArray);
 
+                   var graphOptions = {
+                       vAxis: {
+                           title: 'GPA'
+                       },
+                       hAxis: {
+                           title: 'Semester'
+                       }
+                   };
+
                    if(chartLoaded){
                        chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-                       chart.draw(google.visualization.arrayToDataTable(graphArray));
+                       chart.draw(google.visualization.arrayToDataTable(graphArray), graphOptions);
                    } else {
                        console.log('chart not loaded');
                    }
