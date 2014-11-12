@@ -95,7 +95,7 @@ $(document).on('submit', '#classForm', function(e){
                };
 
                if(chartLoaded){
-                   var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                   var chart = new google.visualization.LineChart(document.getElementById('chartDiv'));
                    chart.draw(google.visualization.arrayToDataTable(graphArray), graphOptions);
                } else {
                    //console.log('chart not loaded');
