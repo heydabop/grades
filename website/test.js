@@ -19,39 +19,61 @@ $(document).on('submit', '#classForm', function(e){
                //console.log(classArray);
                //var divTest = document.getElementById("testBox");
                //divTest.innerHTML = data;
-               var i = 0;
                var cols = [];
                cols.push("Semester");
-               for(i = 0; i < classArray.length; ++i){
+               for(var i = 0; i < classArray.length; ++i){
                    cols.push(classArray[i].prof);
                }
                var colsUnique = cols.filter(onlyUnique);
                var graphArray = [];
                graphArray.push(colsUnique);
                var colsMap = new Map();
-               for(i = 0; i < colsUnique.length; ++i){
+               for(var i = 0; i < colsUnique.length; ++i){
                    colsMap.set(colsUnique[i], i);
                }
                var rowsMap = new Map();
-               for(i = 0; i < classArray.length; ++i){
+               var studentsMap = new Map();
+               for(var i = 0; i < classArray.length; ++i){
                    if (typeof classArray[i].gpa === 'undefined'){
                        continue;
                    }
                    var year = classArray[i].year;
                    var sem = classArray[i].semester;
                    var gpa = classArray[i].gpa;
+                   var students = parseInt(classArray[i].A, 10)
+                       + parseInt(classArray[i].B, 10)
+                       + parseInt(classArray[i].C, 10)
+                       + parseInt(classArray[i].D, 10)
+                       + parseInt(classArray[i].F, 10);
                    var prof = classArray[i].prof;
                    var rowId = graphArray.length;
-                   if (typeof rowsMap.get(year + ' ' + sem) === 'undefined'){
-                       rowsMap.set(year + ' ' + sem, rowId)
+                   var yearSem = year + ' ' + sem
+                   if (typeof studentsMap.get(yearSem + ' ' + prof) === 'undefined'){
+                       studentsMap.set(yearSem + ' ' + prof, students);
+                   } else {
+                       studentsMap.set(yearSem + ' ' + prof,
+                                       studentsMap.get(yearSem + ' ' + prof) + students);
+                   }
+                   if (typeof rowsMap.get(yearSem) === 'undefined'){
+                       rowsMap.set(yearSem, rowId)
                        var newRow = new Array(colsUnique.length);
                        var j = 0;
-                       newRow[0] = (year + ' ' + sem);
+                       newRow[0] = (yearSem);
                        graphArray.push(newRow);
                    } else {
-                       rowId = rowsMap.get(year + ' ' + sem);
+                       rowId = rowsMap.get(yearSem);
                    }
-                   graphArray[rowId][colsMap.get(prof)] = parseFloat(gpa);
+                   if (typeof graphArray[rowId][colsMap.get(prof)] === 'undefined') {
+                       graphArray[rowId][colsMap.get(prof)] = 0;
+                   }
+                   graphArray[rowId][colsMap.get(prof)] += parseFloat(gpa*students);
+               }
+               for(var i = 1; i < graphArray.length; ++i){
+                   for(var j = 1; j < graphArray[i].length; ++j){
+                       if (typeof graphArray[i][j] !== 'undefined') {
+                           graphArray[i][j] /= studentsMap.get(graphArray[i][0] + ' ' + graphArray[0][j]);
+                       }
+                   }
                }
                //console.log(graphArray);
 
