@@ -3,6 +3,7 @@
 var chartLoaded = false;
 var classArray = [];
 var graphArray = [];
+var chart;
 
 function onlyUnique(e, i, self){
     return self.indexOf(e) === i;
@@ -68,13 +69,20 @@ document.addEventListener("DOMContentLoaded", function(event){
                        graphArray[rowId][colsMap.get(prof)] = parseFloat(gpa);
                    }
                    console.log(graphArray);
+
+                   if(chartLoaded){
+                       chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                       chart.draw(google.visualization.arrayToDataTable(graphArray));
+                   } else {
+                       console.log('chart not loaded');
+                   }
                });
         e.preventDefault();
     });
 
 });
 
-google.load('visualization', '1.0', {'packages':['corechart']});
 google.setOnLoadCallback(function(){
     chartLoaded = true;
 });
+google.load('visualization', '1.0', {'packages':['corechart']});
