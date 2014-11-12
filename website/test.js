@@ -1,7 +1,7 @@
 "use strict";
 
 var chartLoaded = false;
-var classJson = null;
+var classArray = [];
 var graphArray = [];
 
 function onlyUnique(e, i, self){
@@ -9,10 +9,6 @@ function onlyUnique(e, i, self){
 }
 
 document.addEventListener("DOMContentLoaded", function(event){
-    google.load('visualization', '1.0', {'packages':['corechart']});
-    google.setOnLoadCallback(function(){
-        chartLoaded = true;
-    });
 
     var deptSel = document.getElementById("deptSelect");
     var o1 = document.createElement("option");
@@ -26,14 +22,20 @@ document.addEventListener("DOMContentLoaded", function(event){
         $.post($(this).attr('action'),
                $(this).serialize(),
                function(data){
-                   classJson = $.parseJSON(data);
+                   console.log(data);
+                   var classJson = $.parseJSON(data);
+                   if (typeof classJson.classes === 'undefined'){
+                       return;
+                   }
+                   classArray = classJson.classes;
+                   console.log(classArray);
                    //var divTest = document.getElementById("testBox");
                    //divTest.innerHTML = data;
                    var i = 0;
                    var cols = [];
                    cols.push("Semester");
-                   for(i = 0; i < classJson.length; ++i){
-                       cols.push(classJson[i].prof);
+                   for(i = 0; i < classArray.length; ++i){
+                       cols.push(classArray[i].prof);
                    }
                    var colsUnique = cols.filter(onlyUnique);
                    graphArray.push(colsUnique);
@@ -42,14 +44,14 @@ document.addEventListener("DOMContentLoaded", function(event){
                        colsMap.set(colsUnique[i], i);
                    }
                    var rowsMap = new Map();
-                   for(i = 0; i < classJson.length; ++i){
-                       if (typeof classJson[i].gpa === 'undefined'){
+                   for(i = 0; i < classArray.length; ++i){
+                       if (typeof classArray[i].gpa === 'undefined'){
                            continue;
                        }
-                       var year = classJson[i].year;
-                       var sem = classJson[i].semester;
-                       var gpa = classJson[i].gpa;
-                       var prof = classJson[i].prof;
+                       var year = classArray[i].year;
+                       var sem = classArray[i].semester;
+                       var gpa = classArray[i].gpa;
+                       var prof = classArray[i].prof;
                        var rowId = i+1;
                        if (typeof map.get(year + ' ' + sem) === 'undefined'){
                            rowsMap.set(year + ' ' + sem, rowId)
@@ -59,8 +61,14 @@ document.addEventListener("DOMContentLoaded", function(event){
                        }
                        graphArray[rowId][colsMap.get(prof)] = gpa;
                    }
+                   console.log(graphArray);
                });
         e.preventDefault();
     });
 
+});
+
+google.load('visualization', '1.0', {'packages':['corechart']});
+google.setOnLoadCallback(function(){
+    chartLoaded = true;
 });
