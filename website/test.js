@@ -1,9 +1,6 @@
 "use strict";
 
 var chartLoaded = false;
-var classArray = [];
-var graphArray = [];
-var chart;
 
 function onlyUnique(e, i, self){
     return self.indexOf(e) === i;
@@ -28,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                    if (typeof classJson.classes === 'undefined'){
                        return;
                    }
-                   classArray = classJson.classes;
+                   var classArray = classJson.classes;
                    console.log(classArray);
                    //var divTest = document.getElementById("testBox");
                    //divTest.innerHTML = data;
@@ -39,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                        cols.push(classArray[i].prof);
                    }
                    var colsUnique = cols.filter(onlyUnique);
+                   var graphArray = [];
                    graphArray.push(colsUnique);
                    var colsMap = new Map();
                    for(i = 0; i < colsUnique.length; ++i){
@@ -69,17 +67,23 @@ document.addEventListener("DOMContentLoaded", function(event){
 
                    var graphOptions = {
                        vAxis: {
-                           title: 'GPA'
+                           title: 'GPA',
+                           gridlines: {
+                               count: -1
+                           }
                        },
                        hAxis: {
-                           title: 'Semester'
+                           title: 'Semester',
+                           gridlines: {
+                               count: -1
+                           }
                        },
                        pointSize: 5,
                        interpolateNulls: true
                    };
 
                    if(chartLoaded){
-                       chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                       var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
                        chart.draw(google.visualization.arrayToDataTable(graphArray), graphOptions);
                    } else {
                        console.log('chart not loaded');
