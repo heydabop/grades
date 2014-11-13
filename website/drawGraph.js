@@ -100,6 +100,46 @@ $(document).on('submit', '#classForm', function(e){
                } else {
                    //console.log('chart not loaded');
                }
+
+               var table = document.getElementById('dataTable');
+               var newRow = table.insertRow(0);
+               newRow.insertCell(0).innerHTML = "Year";
+               newRow.insertCell(1).innerHTML = "Semester";
+               newRow.insertCell(2).innerHTML = "Prof";
+               newRow.insertCell(3).innerHTML = "GPA";
+               newRow.insertCell(4).innerHTML = "Section";
+               newRow.insertCell(5).innerHTML = "A";
+               newRow.insertCell(6).innerHTML = "B";
+               newRow.insertCell(7).innerHTML = "C";
+               newRow.insertCell(8).innerHTML = "D";
+               newRow.insertCell(9).innerHTML = "F";
+               newRow.insertCell(10).innerHTML = "I";
+               newRow.insertCell(11).innerHTML = "Q";
+               newRow.insertCell(12).innerHTML = "S";
+               newRow.insertCell(13).innerHTML = "U";
+               newRow.insertCell(14).innerHTML = "X";
+               for(var i = 0; i < classArray.length; ++i){
+                   var row = table.insertRow(i+1);
+                   row.insertCell(0).innerHTML = classArray[i].year;
+                   row.insertCell(1).innerHTML = classArray[i].semester;
+                   row.insertCell(2).innerHTML = classArray[i].prof;
+                   if (classArray[i].hasOwnProperty("gpa")){
+                       row.insertCell(3).innerHTML = classArray[i].gpa;
+                   } else {
+                       row.insertCell(3);
+                   }
+                   row.insertCell(4).innerHTML = classArray[i].section;
+                   row.insertCell(5).innerHTML = classArray[i].A;
+                   row.insertCell(6).innerHTML = classArray[i].B;
+                   row.insertCell(7).innerHTML = classArray[i].C;
+                   row.insertCell(8).innerHTML = classArray[i].D;
+                   row.insertCell(9).innerHTML = classArray[i].F;
+                   row.insertCell(10).innerHTML = classArray[i].I;
+                   row.insertCell(11).innerHTML = classArray[i].Q;
+                   row.insertCell(12).innerHTML = classArray[i].S;
+                   row.insertCell(13).innerHTML = classArray[i].U;
+                   row.insertCell(14).innerHTML = classArray[i].X;
+               }
            });
     e.preventDefault();
 });
