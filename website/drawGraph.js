@@ -102,8 +102,9 @@ $(document).on('submit', '#classForm', function(e){
                }
 
                var table = document.getElementById('dataTable');
-               table.innerHTML = "";
-               var newRow = table.insertRow(0);
+               table.innerHTML= "<thead></thead>";
+               var tableHead = document.getElementById('dataTable').tHead;
+               var newRow = tableHead.insertRow(0);
                newRow.insertCell(0).innerHTML = "Year";
                newRow.insertCell(1).innerHTML = "Semester";
                newRow.insertCell(2).innerHTML = "Prof";

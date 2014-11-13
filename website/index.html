@@ -5,9 +5,12 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="drawGraph.js"></script>
     <link rel="stylesheet" type="text/css" href="tableGenerator.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="custom.css">
   </head>
 
   <body>
+    <br>
     <div>
       <form action="/grades/getData/" method="post" id="classForm">
         Department (CSCE, MEEN, ENGR, etc.): <input type="text" name="dept">
@@ -18,8 +21,12 @@
     <div id="chartDiv" style="width: 900px; height: 500px;">
     </div>
     <br>
-    <div id="tableDiv" class="CSSTableGenerator">
-      <table id="dataTable">
+    <div id="tableDiv">
+      <table id="dataTable" class="table-striped table-bordered">
+        <thead>
+        </thead>
+        <tbody>
+        </tbody>
       </table>
     </div>
   </body>
