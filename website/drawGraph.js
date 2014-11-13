@@ -125,7 +125,7 @@ $(document).on('submit', '#classForm', function(e){
                    row.insertCell(1).innerHTML = classArray[i].semester;
                    row.insertCell(2).innerHTML = classArray[i].prof;
                    if (classArray[i].hasOwnProperty("gpa")){
-                       row.insertCell(3).innerHTML = classArray[i].gpa;
+                       row.insertCell(3).innerHTML = parseFloat(classArray[i].gpa).toFixed(3);
                    } else {
                        row.insertCell(3);
                    }
