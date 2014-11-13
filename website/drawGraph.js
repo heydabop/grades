@@ -21,8 +21,11 @@ $(document).on('submit', '#classForm', function(e){
                }
                var classArray = classJson.classes;
                //console.log(classArray);
-               //var divTest = document.getElementById("testBox");
-               //divTest.innerHTML = data;
+               for(var i = 0; i < classArray.length; ++i){
+                   if (classArray[i].section[0] === "2"){
+                       classArray[i].prof = classArray[i].prof + " (H)";
+                   }
+               }
                var cols = [];
                cols.push("Semester");
                for(var i = 0; i < classArray.length; ++i){
