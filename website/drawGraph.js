@@ -7,6 +7,10 @@ function onlyUnique(e, i, self){
 }
 
 $(document).on('submit', '#classForm', function(e){
+    document.getElementById('chartDiv').innerHTML = "";
+    document.getElementById('dataTable').innerHTML = "<thead></thead><tbody></tbody>";
+    document.getElementById('classForm').elements[0].value =
+        document.getElementById('classForm').elements[0].value.trim().toUpperCase();
     $.post($(this).attr('action'),
            $(this).serialize(),
            function(data){
