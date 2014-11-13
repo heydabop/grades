@@ -126,7 +126,7 @@ $(document).on('submit', '#classForm', function(e){
                newRow.insertCell(13).innerHTML = "U";
                newRow.insertCell(14).innerHTML = "X";
                for(var i = 0; i < classArray.length; ++i){
-                   var row = tableBody.insertRow(0);
+                   var row = tableBody.insertRow(i);
                    row.insertCell(0).innerHTML = classArray[i].year;
                    row.insertCell(1).innerHTML = classArray[i].semester;
                    row.insertCell(2).innerHTML = classArray[i].prof;
