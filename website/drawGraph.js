@@ -7,10 +7,14 @@ function onlyUnique(e, i, self){
 }
 
 $(document).on('submit', '#classForm', function(e){
+    //clear chart and table for new data
     document.getElementById('chartDiv').innerHTML = "";
     document.getElementById('dataTable').innerHTML = "<thead></thead><tbody></tbody>";
+
+    //make dept input case-insensitive
     document.getElementById('classForm').elements[0].value =
         document.getElementById('classForm').elements[0].value.trim().toUpperCase();
+
     $.post($(this).attr('action'),
            $(this).serialize(),
            function(data){
@@ -21,27 +25,33 @@ $(document).on('submit', '#classForm', function(e){
                }
                var classArray = classJson.classes;
                //console.log(classArray);
-               for(var i = 0; i < classArray.length; ++i){
+
+               for(var i = 0; i < classArray.length; ++i){ //separate honors sections from normal sections in chart
                    if (classArray[i].section[0] === "2"){
                        classArray[i].prof = classArray[i].prof + " (H)";
                    }
                }
+
+               //make column headings for chart
                var cols = [];
                cols.push("Semester");
                for(var i = 0; i < classArray.length; ++i){
                    cols.push(classArray[i].prof);
                }
-               var colsUnique = cols.filter(onlyUnique);
+               var colsUnique = cols.filter(onlyUnique); //ensure each prof only appears once in columns
+
                var graphArray = [];
                graphArray.push(colsUnique);
+
                var colsMap = new Map();
                for(var i = 0; i < colsUnique.length; ++i){
-                   colsMap.set(colsUnique[i], i);
+                   colsMap.set(colsUnique[i], i); //map prof name to column index
                }
-               var rowsMap = new Map();
-               var studentsMap = new Map();
-               for(var i = 0; i < classArray.length; ++i){
-                   if (typeof classArray[i].gpa === 'undefined'){
+
+               var rowsMap = new Map(); //map semester to row in chart data
+               var studentsMap = new Map(); //map semester + prof to number of students taught by that prof in that semsester
+               for(var i = 0; i < classArray.length; ++i){ //add GPAs to chart data
+                   if (typeof classArray[i].gpa === 'undefined'){ //skip secions with no GPA
                        continue;
                    }
                    var year = classArray[i].year;
@@ -55,30 +65,31 @@ $(document).on('submit', '#classForm', function(e){
                    var prof = classArray[i].prof;
                    var rowId = graphArray.length;
                    var yearSem = year + ' ' + sem
-                   if (typeof studentsMap.get(yearSem + ' ' + prof) === 'undefined'){
-                       studentsMap.set(yearSem + ' ' + prof, students);
-                   } else {
+                   if (typeof studentsMap.get(yearSem + ' ' + prof) === 'undefined'){ //if first section prof has taught this semester
+                       studentsMap.set(yearSem + ' ' + prof, students); //set number of students in section
+                   } else { //if not first section prof has taught this semester
                        studentsMap.set(yearSem + ' ' + prof,
-                                       studentsMap.get(yearSem + ' ' + prof) + students);
+                                       studentsMap.get(yearSem + ' ' + prof) + students); //increment number of students taught this semester
                    }
-                   if (typeof rowsMap.get(yearSem) === 'undefined'){
+                   if (typeof rowsMap.get(yearSem) === 'undefined'){ //if row for semester doesn't exist in chart data
+                       //initialize row
                        rowsMap.set(yearSem, rowId)
                        var newRow = new Array(colsUnique.length);
-                       var j = 0;
                        newRow[0] = (yearSem);
                        graphArray.push(newRow);
                    } else {
+                       //existing row into which to add GPA data
                        rowId = rowsMap.get(yearSem);
                    }
-                   if (typeof graphArray[rowId][colsMap.get(prof)] === 'undefined') {
+                   if (typeof graphArray[rowId][colsMap.get(prof)] === 'undefined') { //initialize cell
                        graphArray[rowId][colsMap.get(prof)] = 0;
                    }
-                   graphArray[rowId][colsMap.get(prof)] += parseFloat(gpa*students);
+                   graphArray[rowId][colsMap.get(prof)] += parseFloat(gpa*students); //increment student-weighted GPA
                }
                for(var i = 1; i < graphArray.length; ++i){
                    for(var j = 1; j < graphArray[i].length; ++j){
                        if (typeof graphArray[i][j] !== 'undefined') {
-                           graphArray[i][j] /= studentsMap.get(graphArray[i][0] + ' ' + graphArray[0][j]);
+                           graphArray[i][j] /= studentsMap.get(graphArray[i][0] + ' ' + graphArray[0][j]); //student-weighted average GPAs
                        }
                    }
                }
@@ -88,31 +99,31 @@ $(document).on('submit', '#classForm', function(e){
                    vAxis: {
                        title: 'GPA',
                        gridlines: {
-                           count: -1
+                           count: -1 //auto
                        }
                    },
                    hAxis: {
                        title: 'Semester',
                        gridlines: {
-                           count: -1
+                           count: -1 //auto
                        }
                    },
                    pointSize: 5,
-                   interpolateNulls: true
+                   interpolateNulls: true //lines between point gaps
                };
 
-               if(chartLoaded){
+               if(chartLoaded){ //chart API is loaded
                    var chart = new google.visualization.LineChart(document.getElementById('chartDiv'));
                    chart.draw(google.visualization.arrayToDataTable(graphArray), graphOptions);
                } else {
-                   //console.log('chart not loaded');
+                   console.log('chart API not loaded');
                }
 
                var table = document.getElementById('dataTable');
-               table.innerHTML= "<thead></thead><tbody></tbody>";
+               table.innerHTML= "<thead></thead><tbody></tbody>"; //make sure table is clear
                var tableHead = document.getElementById('dataTable').tHead;
                var tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
-               var newRow = tableHead.insertRow(0);
+               var newRow = tableHead.insertRow(0); //add header row to table
                newRow.insertCell(0).innerHTML = "Year";
                newRow.insertCell(1).innerHTML = "Semester";
                newRow.insertCell(2).innerHTML = "Prof";
@@ -128,7 +139,7 @@ $(document).on('submit', '#classForm', function(e){
                newRow.insertCell(12).innerHTML = "S";
                newRow.insertCell(13).innerHTML = "U";
                newRow.insertCell(14).innerHTML = "X";
-               for(var i = 0; i < classArray.length; ++i){
+               for(var i = 0; i < classArray.length; ++i){ //add data rows to table
                    var row = tableBody.insertRow(i);
                    row.insertCell(0).innerHTML = classArray[i].year;
                    row.insertCell(1).innerHTML = classArray[i].semester;
