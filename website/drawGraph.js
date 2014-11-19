@@ -1,4 +1,5 @@
-"use strict";
+(function(){
+    "use strict";
 
 var chartLoaded = false;
 
@@ -64,7 +65,7 @@ $(document).on('submit', '#classForm', function(e){
                        + parseInt(classArray[i].F, 10);
                    var prof = classArray[i].prof;
                    var rowId = graphArray.length;
-                   var yearSem = year + ' ' + sem
+                   var yearSem = year + ' ' + sem;
                    if (typeof studentsMap.get(yearSem + ' ' + prof) === 'undefined'){ //if first section prof has taught this semester
                        studentsMap.set(yearSem + ' ' + prof, students); //set number of students in section
                    } else { //if not first section prof has taught this semester
@@ -73,7 +74,7 @@ $(document).on('submit', '#classForm', function(e){
                    }
                    if (typeof rowsMap.get(yearSem) === 'undefined'){ //if row for semester doesn't exist in chart data
                        //initialize row
-                       rowsMap.set(yearSem, rowId)
+                       rowsMap.set(yearSem, rowId);
                        var newRow = new Array(colsUnique.length);
                        newRow[0] = (yearSem);
                        graphArray.push(newRow);
@@ -165,7 +166,32 @@ $(document).on('submit', '#classForm', function(e){
     e.preventDefault();
 });
 
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+
 google.setOnLoadCallback(function(){
     chartLoaded = true;
+    var dept = getQueryVariable("dept");
+    var number = getQueryVariable("number");
+    if (typeof dept !== 'undefined' && dept !== false){
+        document.getElementById('classForm').elements[0].value = dept;
+    }
+    if (typeof number !== 'undefined' && number !== false){
+        document.getElementById('classForm').elements[1].value = number;
+    }
+    if (typeof dept !== 'undefined' && typeof number !== 'undefined' &&
+        dept !== false && number !== false){
+        $('#classForm').trigger('submit');
+    }
 });
+
 google.load('visualization', '1.0', {'packages':['corechart']});
+})();
