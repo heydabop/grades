@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	db *sql.DB
+	db          *sql.DB
+	queryLogger *log.Logger
 )
 
 type gradeReq struct {
@@ -31,7 +32,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 	prof := r.PostFormValue("prof")
 	year := r.PostFormValue("year")
 	semester := r.PostFormValue("semester")
-	log.Println(r.Form)
+	//log.Println(r.Form)
 	stmt := "SELECT * FROM classes WHERE 1 "
 	if len(dept) > 0 {
 		stmt += "AND dept='" + dept + "' "
@@ -52,7 +53,8 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		stmt += "AND semester='" + semester + "' "
 	}
 	stmt += "ORDER BY year ASC, CASE WHEN semester = 'SPRING' THEN 1 WHEN semester = 'SUMMER' THEN 2 ELSE 3 END ASC"
-	fmt.Println(stmt)
+	log.Println(stmt)
+	queryLogger.Println(stmt)
 	rows, err := db.Query(stmt)
 	if err != nil {
 		log.Println(err)
@@ -100,7 +102,12 @@ func main() {
 		fmt.Printf("Usage: %s <sqlite3 db file>\n", os.Args[0])
 		return
 	}
-	err := errors.New("")
+	logFile, err := os.OpenFile("queries.log", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	queryLogger = log.New(logFile, "", log.LstdFlags)
+	err = errors.New("")
 	db, err = sql.Open("sqlite3", os.Args[1])
 	if err != nil {
 		log.Fatal(err)
