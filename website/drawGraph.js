@@ -27,6 +27,11 @@ $(document).on('submit', '#classForm', function(e){
                var classArray = classJson.classes;
                //console.log(classArray);
 
+               //change URL to show GET parameters for permalinking
+               window.history.pushState(new Object, '', 'https://anex.us/grades/?dept=' +
+                                        document.getElementById('classForm').elements[0].value + '&number=' +
+                                        document.getElementById('classForm').elements[1].value);
+
                for(var i = 0; i < classArray.length; ++i){ //separate honors sections from normal sections in chart
                    if (classArray[i].section[0] === "2"){
                        classArray[i].prof = classArray[i].prof + " (H)";
