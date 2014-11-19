@@ -7,14 +7,25 @@ function onlyUnique(e, i, self){
     return self.indexOf(e) === i;
 }
 
+    var deptInput = document.getElementById('classForm').elements[0];
+    var numberInput = document.getElementById('classForm').elements[1];
+
 $(document).on('submit', '#classForm', function(e){
     //clear chart and table for new data
     document.getElementById('chartDiv').innerHTML = "";
     document.getElementById('dataTable').innerHTML = "<thead></thead><tbody></tbody>";
 
     //make dept input case-insensitive
-    document.getElementById('classForm').elements[0].value =
-        document.getElementById('classForm').elements[0].value.trim().toUpperCase();
+    deptInput.value = deptInput.value.trim().toUpperCase();
+
+    if(typeof deptInput.value !== 'undefined' && typeof numberInput.value !== 'undefined' &&
+       deptInput.value !== '' && numberInput.value !== ''){
+        //change URL to show GET parameters for permalinking
+        window.history.pushState(new Object, '', location.origin + location.pathname + '?dept=' + deptInput.value + '&number=' + numberInput.value);
+    } else {
+        e.preventDefault();
+        return;
+    }
 
     $.post($(this).attr('action'),
            $(this).serialize(),
@@ -22,15 +33,11 @@ $(document).on('submit', '#classForm', function(e){
                //console.log(data);
                var classJson = $.parseJSON(data);
                if (typeof classJson.classes === 'undefined'){
+                   e.preventDefault();
                    return;
                }
                var classArray = classJson.classes;
                //console.log(classArray);
-
-               //change URL to show GET parameters for permalinking
-               window.history.pushState(new Object, '', location.origin + location.pathname + '?dept=' +
-                                        document.getElementById('classForm').elements[0].value + '&number=' +
-                                        document.getElementById('classForm').elements[1].value);
 
                for(var i = 0; i < classArray.length; ++i){ //separate honors sections from normal sections in chart
                    if (classArray[i].section[0] === "2"){
@@ -187,10 +194,10 @@ google.setOnLoadCallback(function(){
     var dept = getQueryVariable("dept");
     var number = getQueryVariable("number");
     if (typeof dept !== 'undefined' && dept !== false){
-        document.getElementById('classForm').elements[0].value = dept;
+        deptInput.value = dept;
     }
     if (typeof number !== 'undefined' && number !== false){
-        document.getElementById('classForm').elements[1].value = number;
+        numberInput.value = number;
     }
     if (typeof dept !== 'undefined' && typeof number !== 'undefined' &&
         dept !== false && number !== false){
