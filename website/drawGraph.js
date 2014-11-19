@@ -28,7 +28,7 @@ $(document).on('submit', '#classForm', function(e){
                //console.log(classArray);
 
                //change URL to show GET parameters for permalinking
-               window.history.pushState(new Object, '', 'https://anex.us/grades/?dept=' +
+               window.history.pushState(new Object, '', location.origin + location.pathname + '?dept=' +
                                         document.getElementById('classForm').elements[0].value + '&number=' +
                                         document.getElementById('classForm').elements[1].value);
 
