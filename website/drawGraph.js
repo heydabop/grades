@@ -23,6 +23,7 @@
             //change URL to show GET parameters for permalinking
             window.history.pushState(new Object, '', location.origin + location.pathname + '?dept=' + deptInput.value + '&number=' + numberInput.value);
         } else {
+            document.getElementById('chartDiv').innerHTML = "Invalid input.";
             e.preventDefault();
             return;
         }
@@ -31,8 +32,14 @@
                $(this).serialize(),
                function(data){
                    //console.log(data);
-                   var classJson = $.parseJSON(data);
-                   if (typeof classJson.classes === 'undefined'){
+                   var classJson = new Object;
+                   try {
+                       classJson = $.parseJSON(data);
+                   } catch(err) {
+                       document.getElementById('chartDiv').innerHTML = "Invalid data returned. Is your input correct?";
+                   }
+                   if (typeof classJson.classes === 'undefined' || classJson.classes.length == 0){
+                       document.getElementById('chartDiv').innerHTML = "No data returned. Is your input correct?";
                        e.preventDefault();
                        return;
                    }
