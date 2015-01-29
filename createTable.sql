@@ -1,1 +1,1 @@
-CREATE TABLE classes(dept TEXT, number INTEGER, section INTEGER, A INTEGER, B INTEGER, C INTEGER, D INTEGER, F INTEGER, I INTEGER, S INTEGER, U INTEGER, Q INTEGER, X INTEGER, prof TEXT, year INTEGER, semester TEXT, UNIQUE(dept, number, section, year, semester));
+CREATE TABLE classes(dept TEXT, number INTEGER, section INTEGER, A INTEGER, B INTEGER, C INTEGER, D INTEGER, F INTEGER, I INTEGER, S INTEGER, U INTEGER, Q INTEGER, X INTEGER, prof TEXT, year INTEGER, semester TEXT, gpa REAL, UNIQUE(dept, number, section, year, semester));

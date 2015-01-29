@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strconv"
 )
 
 func main() {
@@ -48,18 +49,19 @@ func main() {
 			dept := match[1]
 			number := match[2]
 			section := match[3]
-			A := match[4]
-			B := match[5]
-			C := match[6]
-			D := match[7]
-			F := match[8]
+			A, _ := strconv.ParseUint(match[4], 10, 32)
+			B, _ := strconv.ParseUint(match[5], 10, 32)
+			C, _ := strconv.ParseUint(match[6], 10, 32)
+			D, _ := strconv.ParseUint(match[7], 10, 32)
+			F, _ := strconv.ParseUint(match[8], 10, 32)
 			I := match[9]
 			S := match[10]
 			U := match[11]
 			Q := match[12]
 			X := match[13]
+			gpa := float64(A*4 + B*3 + C*2 + D*1)/float64(A+B+C+D+F)
 			prof := match[14]
-			sqlStmt := `INSERT INTO classes VALUES('` + dept + `', ` + number + `, ` + section + `, ` + A + `, ` + B + `, ` + C + `, ` + D + `, ` + F + `, ` + I + `, ` + S + `, ` + U + `, ` + Q + `, ` + X + `, '` + prof + `', ` + year + `, '` + semester + `');`
+			sqlStmt := `INSERT INTO classes VALUES('` + dept + `', ` + number + `, ` + section + `, ` + strconv.FormatUint(A, 10) + `, ` + strconv.FormatUint(B, 10) + `, ` + strconv.FormatUint(C, 10) + `, ` + strconv.FormatUint(D, 10) + `, ` + strconv.FormatUint(F, 10) + `, ` + I + `, ` + S + `, ` + U + `, ` + Q + `, ` + X + `, '` + prof + `', ` + year + `, '` + semester + `', ` + strconv.FormatFloat(gpa, 'f', 14, 64) + `);`
 			fmt.Println(sqlStmt)
 			_, err = db.Exec(sqlStmt)
 			if err != nil {
