@@ -5,6 +5,19 @@ thead td {
     text-align: center;
 }
 
+div#formDiv{
+    padding: 0px 10px;
+}
+
+div#chartDiv{
+    width: 900px;
+    height: 500px;
+}
+
 div#tableDiv {
-    padding: 0px 10px 10px 10px;
+    width: 900px;
+}
+
+table#dataTable {
+    margin: 0 auto;
 }
