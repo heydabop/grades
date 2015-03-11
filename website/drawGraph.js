@@ -76,7 +76,7 @@
                        }
                        var year = classArray[i].year;
                        var sem = classArray[i].semester;
-                       var gpa = classArray[i].gpa;
+                       var gpa = parseFloat(classArray[i].gpa);
                        var students = parseInt(classArray[i].A, 10)
                            + parseInt(classArray[i].B, 10)
                            + parseInt(classArray[i].C, 10)
@@ -104,12 +104,13 @@
                        if (typeof graphArray[rowId][colsMap.get(prof)] === 'undefined') { //initialize cell
                            graphArray[rowId][colsMap.get(prof)] = 0;
                        }
-                       graphArray[rowId][colsMap.get(prof)] += parseFloat(gpa*students); //increment student-weighted GPA
+                       graphArray[rowId][colsMap.get(prof)] += gpa*students; //increment student-weighted GPA
                    }
                    for(var i = 1; i < graphArray.length; ++i){
                        for(var j = 1; j < graphArray[i].length; ++j){
                            if (typeof graphArray[i][j] !== 'undefined') {
                                graphArray[i][j] /= studentsMap.get(graphArray[i][0] + ' ' + graphArray[0][j]); //student-weighted average GPAs
+                               graphArray[i][j] = parseFloat(graphArray[i][j].toFixed(3)) //round to 3 (for cleanliness in tooltip)
                            }
                        }
                    }
