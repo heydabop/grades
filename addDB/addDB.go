@@ -33,6 +33,11 @@ func main() {
 	year := ""
 	semester := ""
 	count := 0
+	fmt.Println("BEGIN;")
+	_, err = db.Exec("BEGIN;")
+	if err != nil {
+		log.Fatal(err)
+	}
 	for line, err = txtReader.ReadString('\n'); err == nil; line, err = txtReader.ReadString('\n') {
 		if len(year) == 0 {
 			match := yearSemesterRegex.FindStringSubmatch(line)
@@ -65,13 +70,19 @@ func main() {
 			fmt.Println(sqlStmt)
 			_, err = db.Exec(sqlStmt)
 			if err != nil {
+				fmt.Println("ROLLBACK;")
+				db.Exec("ROLLBACK;")
 				log.Fatal(err)
 			}
 			count++
 		}
 	}
 	if err != nil {
-		log.Println(err)
+		fmt.Println("ROLLBACK;")
+		db.Exec("ROLLBACK;")
+		log.Fatal(err)
 	}
+	fmt.Println("COMMIT;")
+	db.Exec("COMMIT;")
 	fmt.Printf("%d rows inserted\n", count)
 }
