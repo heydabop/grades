@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -53,6 +54,7 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 		stmt += "AND semester='" + semester + "' "
 	}
 	stmt += "ORDER BY year ASC, CASE WHEN semester = 'SPRING' THEN 1 WHEN semester = 'SUMMER' THEN 2 ELSE 3 END ASC"
+	stmt = strings.Replace(stmt, ";", "", -1)
 	log.Println(stmt)
 	queryLogger.Println(stmt)
 	rows, err := db.Query(stmt)
