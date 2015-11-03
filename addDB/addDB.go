@@ -69,7 +69,7 @@ func main() {
 			U := match[11]
 			Q := match[12]
 			X := match[13]
-			gpa := float64(A*4 + B*3 + C*2 + D*1)/float64(A+B+C+D+F)
+			gpa := float64(A*4+B*3+C*2+D*1) / float64(A+B+C+D+F)
 			prof := match[14]
 			sqlStmt := `INSERT INTO classes VALUES('` + dept + `', ` + number + `, ` + section + `, ` + strconv.FormatUint(A, 10) + `, ` + strconv.FormatUint(B, 10) + `, ` + strconv.FormatUint(C, 10) + `, ` + strconv.FormatUint(D, 10) + `, ` + strconv.FormatUint(F, 10) + `, ` + I + `, ` + S + `, ` + U + `, ` + Q + `, ` + X + `, '` + prof + `', ` + year + `, '` + semester + `', ` + strconv.FormatFloat(gpa, 'f', 14, 64) + `);`
 			fmt.Println(sqlStmt)
