@@ -29,7 +29,7 @@ func main() {
 	}
 	defer db.Close()
 	txtReader := bufio.NewReader(txtFile)
-	line := ""
+	txtScanner := bufio.NewScanner(txtReader)
 	year := ""
 	semester := ""
 	count := 0
@@ -38,15 +38,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for line, err = txtReader.ReadString('\n'); err == nil; line, err = txtReader.ReadString('\n') {
+	for txtScanner.Scan() {
+		if err := txtScanner.Err(); err != nil {
+			fmt.Println("ROLLBACK;")
+			db.Exec("ROLLBACK;")
+			log.Fatal(err)
+		}
 		if len(year) == 0 {
-			match := yearSemesterRegex.FindStringSubmatch(line)
+			match := yearSemesterRegex.FindStringSubmatch(txtScanner.Text())
 			if match != nil {
 				semester = match[1]
 				year = match[2]
 			}
 		}
-		if match := classLineRegex.FindStringSubmatch(line); match != nil {
+		if match := classLineRegex.FindStringSubmatch(txtScanner.Text()); match != nil {
 			/*for i := 1; i < len(match); i++ {
 				fmt.Printf("%s, ", match[i])
 			}
