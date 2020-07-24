@@ -197,7 +197,9 @@
         return(false);
     }
 
-    google.setOnLoadCallback(function(){
+    google.charts.load('current', {'packages':['corechart']});
+
+    google.charts.setOnLoadCallback(function(){
         chartLoaded = true;
         var dept = getQueryVariable("dept");
         var number = getQueryVariable("number");
@@ -212,6 +214,4 @@
             $('#classForm').trigger('submit');
         }
     });
-
-    google.load('visualization', '1.0', {'packages':['corechart']});
 })();
