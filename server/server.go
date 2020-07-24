@@ -26,7 +26,26 @@ type gradeReq struct {
 	Semester string
 }
 
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	var check int
+	if err := db.QueryRow("SELECT 1 FROM classes").Scan(&check); err != nil {
+		log.Println(err)
+		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10)+" Error", http.StatusInternalServerError)
+		return
+	}
+	if check != 1 {
+		log.Println("Check not equal 1")
+		http.Error(w, strconv.FormatInt(http.StatusInternalServerError, 10)+" Error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func getDataHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		log.Println("GET request")
+		http.Error(w, strconv.FormatInt(http.StatusMethodNotAllowed, 10)+" Error", http.StatusMethodNotAllowed)
+		return
+	}
 	dept := r.PostFormValue("dept")
 	number := r.PostFormValue("number")
 	section := r.PostFormValue("section")
@@ -34,6 +53,16 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 	year := r.PostFormValue("year")
 	semester := r.PostFormValue("semester")
 	//log.Println(r.Form)
+	if len(dept) < 1 && len(number) < 1 && len(section) < 1 && len(prof) < 1 && len(year) < 1 && len(semester) < 1 {
+		log.Println("Empty request")
+		http.Error(w, strconv.FormatInt(http.StatusBadRequest, 10)+" Error", http.StatusBadRequest)
+		return
+	}
+	if len(dept) < 1 || len(number) < 1 {
+		log.Println("Incomplete request")
+		http.Error(w, strconv.FormatInt(http.StatusBadRequest, 10)+" Error", http.StatusBadRequest)
+		return
+	}
 	stmt := "SELECT * FROM classes WHERE 1 "
 	if len(dept) > 0 {
 		stmt += "AND dept='" + dept + "' "
@@ -116,6 +145,7 @@ func main() {
 	}
 	defer db.Close()
 	http.HandleFunc("/getData/", getDataHandler)
+	http.HandleFunc("/health/", healthHandler)
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
