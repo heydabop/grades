@@ -3,4 +3,4 @@ address = "localhost"
 port = 8080
 
 [global.databases]
-grades = { url = "../grades.db" }
+classes = { url = "../classes.db" }
