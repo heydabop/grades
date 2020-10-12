@@ -689,18 +689,18 @@ checksum = "d4fd5641d01c8f18a23da7b6fe29298ff4b55afcccdf78973b24cf3175fee32e"
 
 [[package]]
 name = "pin-project"
-version = "0.4.26"
+version = "0.4.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13fbdfd6bdee3dc9be46452f86af4a4072975899cf8592466668620bebfbcc17"
+checksum = "2ffbc8e94b38ea3d2d8ba92aea2983b503cd75d0888d75b86bb37970b5698e15"
 dependencies = [
  "pin-project-internal",
 ]
 
 [[package]]
 name = "pin-project-internal"
-version = "0.4.26"
+version = "0.4.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c82fb1329f632c3552cf352d14427d57a511b1cf41db93b3a7d77906a82dcc8e"
+checksum = "65ad2ae56b6abe3a1ee25f15ee605bacadb9a764edaba9c2bf4103800d4a1895"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -817,7 +817,7 @@ dependencies = [
 [[package]]
 name = "rocket"
 version = "0.5.0-dev"
-source = "git+https://github.com/SergioBenitez/Rocket#1369dc47a357567ec3d3d711e318248dabd4b7f7"
+source = "git+https://github.com/SergioBenitez/Rocket#29f47261273acd8854ba8b1fa748ddfda474991f"
 dependencies = [
  "async-trait",
  "atomic",
@@ -844,7 +844,7 @@ dependencies = [
 [[package]]
 name = "rocket_codegen"
 version = "0.5.0-dev"
-source = "git+https://github.com/SergioBenitez/Rocket#1369dc47a357567ec3d3d711e318248dabd4b7f7"
+source = "git+https://github.com/SergioBenitez/Rocket#29f47261273acd8854ba8b1fa748ddfda474991f"
 dependencies = [
  "devise",
  "glob",
@@ -856,7 +856,7 @@ dependencies = [
 [[package]]
 name = "rocket_contrib"
 version = "0.5.0-dev"
-source = "git+https://github.com/SergioBenitez/Rocket#1369dc47a357567ec3d3d711e318248dabd4b7f7"
+source = "git+https://github.com/SergioBenitez/Rocket#29f47261273acd8854ba8b1fa748ddfda474991f"
 dependencies = [
  "brotli",
  "flate2",
@@ -874,7 +874,7 @@ dependencies = [
 [[package]]
 name = "rocket_contrib_codegen"
 version = "0.5.0-dev"
-source = "git+https://github.com/SergioBenitez/Rocket#1369dc47a357567ec3d3d711e318248dabd4b7f7"
+source = "git+https://github.com/SergioBenitez/Rocket#29f47261273acd8854ba8b1fa748ddfda474991f"
 dependencies = [
  "devise",
  "quote",
@@ -883,7 +883,7 @@ dependencies = [
 [[package]]
 name = "rocket_http"
 version = "0.5.0-dev"
-source = "git+https://github.com/SergioBenitez/Rocket#1369dc47a357567ec3d3d711e318248dabd4b7f7"
+source = "git+https://github.com/SergioBenitez/Rocket#29f47261273acd8854ba8b1fa748ddfda474991f"
 dependencies = [
  "cookie",
  "http",
@@ -1098,9 +1098,9 @@ checksum = "213701ba3370744dcd1a12960caa4843b3d68b4d1c0a5d575e0d65b2ee9d16c0"
 
 [[package]]
 name = "syn"
-version = "1.0.43"
+version = "1.0.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e2e59c50ed8f6b050b071aa7b6865293957a9af6b58b94f97c1c9434ad440ea"
+checksum = "e03e57e4fcbfe7749842d53e24ccb9aa12b7252dbe5e91d2acad31834c8b8fdd"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1206,9 +1206,9 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.5.6"
+version = "0.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffc92d160b1eef40665be3a05630d003936a3bc7da7421277846c2613e92c71a"
+checksum = "75cf45bb0bef80604d001caaec0d09da99611b3c0fd39d3080468875cdb65645"
 dependencies = [
  "serde",
 ]

@@ -4,6 +4,7 @@ extern crate rocket_contrib;
 
 use rocket::http::Status;
 use rocket::request::{FromForm, LenientForm};
+use rocket_contrib::compression::Compression;
 use rocket_contrib::databases::database;
 use rocket_contrib::databases::rusqlite::{self, NO_PARAMS};
 use rocket_contrib::json::Json;
@@ -155,4 +156,5 @@ fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .attach(ClassesDb::fairing())
         .mount("/", routes![health, get_data])
+        .attach(Compression::fairing())
 }
