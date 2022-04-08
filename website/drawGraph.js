@@ -160,6 +160,7 @@
                    newRow.insertCell(12).innerHTML = "S";
                    newRow.insertCell(13).innerHTML = "U";
                    newRow.insertCell(14).innerHTML = "X";
+                   classArray.reverse();
                    for(var i = 0; i < classArray.length; ++i){ //add data rows to table
                        var row = tableBody.insertRow(i);
                        row.insertCell(0).innerHTML = classArray[i].year;
