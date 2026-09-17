@@ -2,9 +2,10 @@
 
 url = ARGV[0]
 
-filename = %r{/(grd.*?)\.pdf}.match(url)[1]
-puts "wget #{url} -O #{filename}.pdf"
-system "wget #{url} -O #{filename}.pdf"
+matched = %r{year=(.+?)&term=(.+?)&college=(..)}.match(url)
+filename = "#{matched[1]}-#{matched[2]}-#{matched[3]}"
+puts "wget '#{url}' -O #{filename}.pdf"
+system "wget '#{url}' -O #{filename}.pdf"
 
 puts "pdftotext -layout #{filename}.pdf"
 system "pdftotext -layout #{filename}.pdf"

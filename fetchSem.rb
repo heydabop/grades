@@ -1,20 +1,21 @@
 #!/usr/bin/ruby
 
-sem = ARGV[0]
+year = ARGV[0]
+sem = ARGV[1]
 
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}AC.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}AG.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}AR.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}AT.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}BA.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}ED.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}EH.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}EL.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}EN.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}GB.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}GE.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}LA.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}MS.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}MN.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}SC.pdf classes.db")
-system("./fetch.rb http://web-as.tamu.edu/GradeReports/PDFReports/#{sem}/grd#{sem}VM.pdf classes.db")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=AC'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=AG'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=AR'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=AT'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=BA'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=ED'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=EH'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=EL'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=EN'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=GB'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=GE'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=LA'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=MS'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=MN'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=SC'")
+system("./fetch.rb 'https://web-as.tamu.edu/gradereports/Report?year=#{year}&term=#{sem}&college=VM'")
