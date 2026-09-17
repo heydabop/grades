@@ -13,8 +13,7 @@ import (
 )
 
 var (
-	db          *sql.DB
-	queryLogger *log.Logger
+	db *sql.DB
 )
 
 type gradeReq struct {
@@ -85,7 +84,6 @@ func getDataHandler(w http.ResponseWriter, r *http.Request) {
 	stmt += "ORDER BY year ASC, CASE WHEN semester = 'SPRING' THEN 1 WHEN semester = 'SUMMER' THEN 2 ELSE 3 END ASC"
 	stmt = strings.Replace(stmt, ";", "", -1)
 	log.Println(stmt)
-	queryLogger.Println(stmt)
 	rows, err := db.Query(stmt)
 	if err != nil {
 		log.Println(err)
@@ -133,12 +131,7 @@ func main() {
 		fmt.Printf("Usage: %s <sqlite3 db file>\n", os.Args[0])
 		return
 	}
-	logFile, err := os.OpenFile("queries.log", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	queryLogger = log.New(logFile, "", log.LstdFlags)
-	err = errors.New("")
+	err := errors.New("")
 	db, err = sql.Open("sqlite3", os.Args[1])
 	if err != nil {
 		log.Fatal(err)
